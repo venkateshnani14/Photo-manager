@@ -3,7 +3,6 @@ import { projectStorage, projectFirestore } from '../Firebase/config';
 import { getStorage, ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject } from 'firebase/storage';
 import gsap from 'gsap';
 export const useStorage = (file) => {
-  const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
   const storage = projectStorage;
@@ -12,13 +11,11 @@ export const useStorage = (file) => {
     const storageRef = ref(storage,file.name);
     uploadBytes(storageRef,file).then((snapshot) => {
         let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(percentage);
         console.log('uploaded file to the cloud')
-        console.log("progresss:",progress)
      })
   }, [file]);
 
-  return { progress, url, error };
+  return { url, error };
 }
 
 export const getFiles = async (e) => {
@@ -42,11 +39,11 @@ export const getFiles = async (e) => {
             const button = document.createElement('button');
             div.className = 'relative m-2 rounded-xl'
             childDiv.className = 'absolute inset-0 rounded-xl hover:cursor-pointer transition-all'
-            button.className = 'bg-slate-700 text-whitesmoke outline-none bottom-0 right-0 absolute m-2 transition-all'
+            button.className = 'bg-slate-700 text-xs md:text-lg lg:text-xl text-whitesmoke outline-none bottom-0 right-0 absolute m-2 transition-all'
             button.textContent = 'Delete'
             img.className = 'rounded-lg hover:cursor-pointer h-[40vh] w-[30vw] relative'
             img.src = url;
-            img.alt = "gallery_image"
+            img.alt = "gallery_image";
             img.onclick = () => gsap.to(img,{scale:'1.2',yoyo:true,duration:1,repeat:1,zIndex:10})
             document.getElementById('imgs').appendChild(div);
             div.appendChild(img)
